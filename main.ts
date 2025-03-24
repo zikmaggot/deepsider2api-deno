@@ -6,16 +6,27 @@ import {
   Status,
 } from "https://deno.land/x/oak@v12.6.1/mod.ts";
 import { config as dotenv } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
-import { Logger } from "https://deno.land/std@0.224.0/log/logger.ts";
+import * as log from "https://deno.land/std@0.224.0/log/mod.ts";
 
 // 环境变量配置
 await dotenv({ export: true });
 
-// 日志配置
-const logger = new Logger("openai-proxy", {
-  level: "INFO",
-  format: "[%datetime%] %levelname% %msg%",
+// 日志配置（修复后的版本）
+await log.setup({
+  handlers: {
+    console: new log.ConsoleHandler("INFO", {
+      formatter: "[{datetime}] {levelName} {msg}",
+    }),
+  },
+  loggers: {
+    "openai-proxy": {
+      level: "INFO",
+      handlers: ["console"],
+    },
+  },
 });
+
+const logger = log.getLogger("openai-proxy");
 
 // 模型类型定义
 interface ChatMessage {
