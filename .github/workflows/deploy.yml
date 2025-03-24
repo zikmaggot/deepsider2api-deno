@@ -37,7 +37,7 @@ jobs:
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
-          project: "jiaxin-deepsider2a-80"
+          project: "jiaxin-deepsider2a-79"
           entrypoint: "main.ts"
           root: ""
           
