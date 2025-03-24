@@ -1,23 +1,11 @@
-// deno-libs.ts
-export {
-  Application,
-  Context,
-  Router,
-  helpers,
-  Status,
-} from "https://deno.land/x/oak@v12.6.1/mod.ts";
-export type { RouterContext } from "https://deno.land/x/oak@v12.6.1/mod.ts";
-export { config as dotenv } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
-
 // main.ts
 import {
   Application,
   Context,
   Router,
-  helpers,
   Status,
-} from "./deno-libs.ts";
-import { dotenv } from "./deno-libs.ts";
+} from "https://deno.land/x/oak@v12.6.1/mod.ts";
+import { config as dotenv } from "https://deno.land/x/dotenv@v3.2.2/mod.ts";
 import { Logger } from "https://deno.land/std@0.224.0/log/logger.ts";
 
 // 环境变量配置
@@ -73,7 +61,7 @@ function getHeaders(apiKey: string): Headers {
   const currentToken = tokens[TOKEN_INDEX % tokens.length].trim();
   TOKEN_INDEX = (TOKEN_INDEX + 1) % tokens.length;
 
-  const headers = new Headers({
+  return new Headers({
     "accept": "*/*",
     "accept-encoding": "gzip, deflate, br, zstd",
     "accept-language": "en-US,en;q=0.9,zh-CN;q=0.8,zh;q=0.7",
@@ -91,8 +79,6 @@ function getHeaders(apiKey: string): Headers {
       "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/134.0.0.0 Safari/537.36",
     "authorization": `Bearer ${currentToken}`,
   });
-
-  return headers;
 }
 
 function mapOpenAIToDeepsiderModel(model: string): string {
@@ -124,6 +110,7 @@ function formatMessagesForDeepsider(messages: ChatMessage[]): string {
   return prompt.trim();
 }
 
+// 中间件
 async function verifyApiKey(ctx: Context, next: () => Promise<unknown>) {
   const authHeader = ctx.request.headers.get("authorization");
   if (!authHeader?.startsWith("Bearer ")) {
@@ -218,7 +205,7 @@ function createStreamResponse(
           return;
         }
 
-        buffer += decoder.decode(value);
+        buffer += decoder.decode(value, { stream: true });
         const lines = buffer.split("\n");
         buffer = lines.pop() || "";
 
@@ -284,7 +271,9 @@ async function processNonStreamResponse(response: Response): Promise<string> {
     const { done, value } = await reader.read();
     if (done) break;
     
-    const lines = decoder.decode(value).split("\n");
+    const chunk = decoder.decode(value);
+    const lines = chunk.split("\n");
+    
     for (const line of lines) {
       if (!line.startsWith("data: ")) continue;
       
@@ -294,7 +283,7 @@ async function processNonStreamResponse(response: Response): Promise<string> {
           fullResponse += data.data.content || "";
         }
       } catch (e) {
-        // 忽略解析错误
+        logger.error(`非流式响应出错`);
       }
     }
   }
