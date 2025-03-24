@@ -37,15 +37,21 @@ let TOKEN_INDEX = 0;
 
 // Model mapping table
 const MODEL_MAPPING: Record<string, string> = {
-  "gpt-3.5-turbo": "anthropic/claude-3.5-sonnet",
-  "gpt-4": "anthropic/claude-3.7-sonnet",
-  "gpt-4o": "openai/gpt-4o",
-  "gpt-4-turbo": "openai/gpt-4o",
   "gpt-4o-mini": "openai/gpt-4o-mini",
-  "claude-3-sonnet-20240229": "anthropic/claude-3.5-sonnet",
-  "claude-3-opus-20240229": "anthropic/claude-3.7-sonnet",
+  "gpt-4o": "openai/gpt-4o",
+  "o1": "openai/o1",
+  "o3-mini": "oopenai/o3-mini",
   "claude-3.5-sonnet": "anthropic/claude-3.5-sonnet",
   "claude-3.7-sonnet": "anthropic/claude-3.7-sonnet",
+  "grok-3": "x-ai/grok-3",
+  "grok-3-reasoner":"x-ai/grok-3-reasoner",
+  "deepseek-v3":"deepseek/deepseek-chat",
+  "deepseek-r1":"deepseek/deepseek-r1",
+  "gemini-2.0-flash":"google/gemini-2.0-flash",
+  "gemini-2.0-pro-exp":"google/gemini-2.0-pro-exp-02-05",
+  "gemini-2.0-flash-thinking-exp":"google/gemini-2.0-flash-thinking-exp-1219",
+  "qwq-32b":"qwen/qwq-32b",
+  "qwen-max":"qwen/qwen-max"
 };
 
 // TypeScript interfaces
