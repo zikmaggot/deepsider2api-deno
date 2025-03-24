@@ -1,0 +1,2 @@
+# deepsider2api-deno
+deepsider2api deno脚本，支持将扩展deepsider api转换成openai标准格式，支持流式响应和获取模型列表请求
