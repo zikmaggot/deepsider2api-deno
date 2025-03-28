@@ -39,6 +39,7 @@ let TOKEN_INDEX = 0;
 const MODEL_MAPPING: Record<string, string> = {
   "gpt-4o-mini": "openai/gpt-4o-mini",
   "gpt-4o": "openai/gpt-4o",
+  "gpt-4o-image": "openai/gpt-4o-image",
   "o1": "openai/o1",
   "o3-mini": "oopenai/o3-mini",
   "claude-3.5-sonnet": "anthropic/claude-3.5-sonnet",
